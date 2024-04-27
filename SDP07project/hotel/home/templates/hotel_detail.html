@@ -1,0 +1,84 @@
+{% extends "base-nav.html" %}
+
+{% block start %}
+<body class="bg-light">
+    <div class="container mt-5 pt-5">
+        <div class="row">
+            <div class="col">
+
+               <div class="col">
+    <div id="imageCarousel{{hotels_obj.uid}}" class="carousel slide" data-bs-ride="carousel">
+        <div >
+            {% for image in hotels_obj.images.all %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <img src="/media/{{image.images}}" class="d-block w-100">
+
+                    </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+            </div>
+            <div class="col-md-5">
+                <h5>{{hotels_obj.hotel_name}}</h5>
+                <p>{{hotels_obj.description|truncatechars:150}}</p>
+                <p>
+                    {% for amenitie in hotels_obj.amenities.all %}
+                    <b>{{amenitie.amenity_name}}</b>,
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="col-md-2 border-left text-center more-offers">
+                <p>Place:</p>
+                <p>Goa</p>
+                <p>₹{{hotels_obj.hotel_price}}</p>
+                <p>Room count</p>
+                <p>{{hotels_obj.room_count}}</p>
+            </div>
+            <div class="col-md-2 border-left text-center more-offers">
+
+            </div>
+
+        </div>
+
+
+        {% if request.user.is_authenticated %}
+        <div class="row filter-card2">
+            <div class="col-md-12">
+                <h5>Book Hotel</h5>
+                {% include "messages.html" %}
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <label for="mintopay">Check in</label>
+                            <input type="date" name="checkin" id="checkin" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="maxtopay">Check out</label>
+                            <input type="date" name="checkout" id="checkout" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <br>
+                        <div class="col-md-12">
+                            <br>
+                            <a href="/payment/" class="btn btn-primary btn-block">book</a>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div class="row mt-5">
+            <div class="col-md-12">
+                <a href="/login/" class="btn btn-primary btn-block">Login</a>
+            </div>
+        </div>
+
+        {% endif %}
+    </div>
+<br>
+</body>
+{% endblock %}
